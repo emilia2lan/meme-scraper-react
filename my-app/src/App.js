@@ -2,38 +2,10 @@
 import { css } from '@emotion/react';
 import { useEffect, useState } from 'react';
 
-const memeApp = css`
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  grid-row: auto;
-  padding-top: 25px;
-
-  h1 {
-    font-family: sans-serif;
-    margin: 25px;
-    grid-column: 1 / 2;
-  }
-  p {
-    font-family: sans-serif;
-    grid-column: 1;
-  }
-
-  .topSentence {
-    grid-column: 1;
-    height: 25px;
-  }
-  .bottomSentence {
-    grid-column: 1;
-    height: 25px;
-  }
-  .select {
-    grid-column: 1;
-    height: 30px;
-    margin-bottom: 20px;
-  }
-  .meme {
-    grid-column: 3;
-  }
+const picture = css`
+  display: flex;
+  width: 150px;
+  height: 400px;
 `;
 
 export function handleChange(e) {
@@ -45,7 +17,9 @@ export default function App() {
   const [userText, setUserText] = useState('');
   const [userBottomText, setUserBottomText] = useState('');
   const [arrMemeId, setArrMemeId] = useState([]);
+  const address = `https://api.memegen.link/images/${imageKey}/${userText}/${userBottomText}`;
 
+  // parse the URL and get the memes (=>id)
   useEffect(() => {
     fetch('https://api.memegen.link/templates')
       .then((response) => response.json())
@@ -61,23 +35,39 @@ export default function App() {
       });
   }, []);
 
+  // download the meme together with the text in a jpg file
+  function handleDownloadClick(props) {
+    fetch(address).then((response) => {
+      response.arrayBuffer().then((buffer) => {
+        var element = document.createElement('a');
+        var file = new Blob([buffer], { type: 'image/jpeg' });
+        console.log('file: ', file);
+        element.href = URL.createObjectURL(file);
+        console.log('element.href: ', element.href);
+        element.download = 'image.jpg';
+        element.click();
+      });
+    });
+  }
   return (
     <section>
-      <div css={memeApp}>
+      <div>
         <h1>Meme Generator App</h1>
         <p>Enter your top sentence:</p>
         <input
           className="topSentence"
           type="text"
           value={userText}
-          onChange={(e) => setUserText(e.target.value)}
+          onChange={(e) => setUserText(e.target.value.replace(/\s/g, '_'))}
         />
         <p>Enter your bottom sentence:</p>
         <input
           className="bottomSentence"
           type="text"
           value={userBottomText}
-          onChange={(e) => setUserBottomText(e.target.value)}
+          onChange={(e) =>
+            setUserBottomText(e.target.value.replace(/\s/g, '_'))
+          }
         />
         <p>Select your meme here:</p>
         <select
@@ -89,11 +79,14 @@ export default function App() {
           ))}
         </select>
       </div>
-      <div className="meme">
-        <img
-          src={`https://api.memegen.link/images/${imageKey}/${userText}/${userBottomText}`}
-          alt=" "
-        />
+      <div css={picture}>
+        <img src={address} alt=" " />
+      </div>
+
+      <div>
+        <button onClick={handleDownloadClick} download>
+          Download meme
+        </button>
       </div>
     </section>
   );

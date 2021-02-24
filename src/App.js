@@ -8,12 +8,8 @@ const picture = css`
   height: 400px;
 `;
 
-export function handleChange(e) {
-  console.log(e.target.value);
-}
-
 export default function App() {
-  let [imageKey, setImageKey] = useState('noidea');
+  const [imageKey, setImageKey] = useState('noidea');
   const [userText, setUserText] = useState('');
   const [userBottomText, setUserBottomText] = useState('');
   const [arrMemeId, setArrMemeId] = useState([]);
@@ -30,7 +26,6 @@ export default function App() {
           console.log(meme.id);
           return meme.id;
         });
-        console.log(memeArr);
         setArrMemeId(responseArrMemeId);
       });
   }, []);
@@ -39,11 +34,9 @@ export default function App() {
   function handleDownloadClick(props) {
     fetch(address).then((response) => {
       response.arrayBuffer().then((buffer) => {
-        var element = document.createElement('a');
-        var file = new Blob([buffer], { type: 'image/jpeg' });
-        console.log('file: ', file);
+        let element = document.createElement('a');
+        let file = new Blob([buffer], { type: 'image/jpeg' });
         element.href = URL.createObjectURL(file);
-        console.log('element.href: ', element.href);
         element.download = 'image.jpg';
         element.click();
       });
@@ -55,14 +48,12 @@ export default function App() {
         <h1>Meme Generator App</h1>
         <p>Enter your top sentence:</p>
         <input
-          className="topSentence"
           type="text"
           value={userText}
           onChange={(e) => setUserText(e.target.value.replace(/\s/g, '_'))}
         />
         <p>Enter your bottom sentence:</p>
         <input
-          className="bottomSentence"
           type="text"
           value={userBottomText}
           onChange={(e) =>
@@ -70,10 +61,7 @@ export default function App() {
           }
         />
         <p>Select your meme here:</p>
-        <select
-          className="select"
-          onChange={(event) => setImageKey(event.target.value)}
-        >
+        <select onChange={(event) => setImageKey(event.target.value)}>
           {arrMemeId.map((id) => (
             <option value={id}>{id}</option>
           ))}

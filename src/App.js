@@ -1,5 +1,5 @@
-/** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
+/** @jsxImportSource @emotion/react */
 import { useEffect, useState } from 'react';
 
 const picture = css`
@@ -20,10 +20,7 @@ export default function App() {
     fetch('https://api.memegen.link/templates')
       .then((response) => response.json())
       .then((memeArr) => {
-        console.log(memeArr[0].id);
-
         const responseArrMemeId = memeArr.map((meme) => {
-          console.log(meme.id);
           return meme.id;
         });
         setArrMemeId(responseArrMemeId);
@@ -63,7 +60,9 @@ export default function App() {
         <p>Select your meme here:</p>
         <select onChange={(event) => setImageKey(event.target.value)}>
           {arrMemeId.map((id) => (
-            <option value={id}>{id}</option>
+            <option key={id} value={id}>
+              {id}
+            </option>
           ))}
         </select>
       </div>

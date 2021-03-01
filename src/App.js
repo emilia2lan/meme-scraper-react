@@ -31,8 +31,8 @@ export default function App() {
   function handleDownloadClick(props) {
     fetch(address).then((response) => {
       response.arrayBuffer().then((buffer) => {
-        let element = document.createElement('a');
-        let file = new Blob([buffer], { type: 'image/jpeg' });
+        const element = document.createElement('a');
+        const file = new Blob([buffer], { type: 'image/jpeg' });
         element.href = URL.createObjectURL(file);
         element.download = 'image.jpg';
         element.click();

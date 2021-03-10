@@ -10,10 +10,10 @@ const picture = css`
 
 export default function App() {
   const [imageKey, setImageKey] = useState('noidea');
-  const [userText, setUserText] = useState('');
+  const [userTopText, setUserTopText] = useState('');
   const [userBottomText, setUserBottomText] = useState('');
   const [arrMemeId, setArrMemeId] = useState([]);
-  const address = `https://api.memegen.link/images/${imageKey}/${userText}/${userBottomText}`;
+  const address = `https://api.memegen.link/images/${imageKey}/${userTopText}/${userBottomText}`;
 
   // parse the URL and get the memes (=>id)
   useEffect(() => {
@@ -28,7 +28,7 @@ export default function App() {
   }, []);
 
   // download the meme together with the text in a jpg file
-  function handleDownloadClick(props) {
+  function handleDownloadClick() {
     fetch(address).then((response) => {
       response.arrayBuffer().then((buffer) => {
         const element = document.createElement('a');
@@ -45,13 +45,11 @@ export default function App() {
         <h1>Meme Generator App</h1>
         <p>Enter your top sentence:</p>
         <input
-          type="text"
-          value={userText}
-          onChange={(e) => setUserText(e.target.value.replace(/\s/g, '_'))}
+          value={userTopText}
+          onChange={(e) => setUserTopText(e.target.value.replace(/\s/g, '_'))}
         />
         <p>Enter your bottom sentence:</p>
         <input
-          type="text"
           value={userBottomText}
           onChange={(e) =>
             setUserBottomText(e.target.value.replace(/\s/g, '_'))

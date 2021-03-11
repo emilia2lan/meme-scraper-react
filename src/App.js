@@ -69,7 +69,7 @@ export default function App() {
       </div>
 
       <div>
-        <button onClick={handleDownloadClick} download>
+        <button onClick={handleDownloadClick}>
           Download meme
         </button>
       </div>
